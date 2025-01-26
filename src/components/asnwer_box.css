@@ -1,0 +1,38 @@
+.messages {
+    width: 80%;
+    margin: 20px auto;
+    padding: 10px;
+    background-color: rgb(151, 151, 151);
+    border-radius: 10px;
+    overflow-y: auto;
+    max-height: 60vh; /* Adjust as per the container height */
+    text-align: left;
+}
+
+.message {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 16px;
+    max-width: 60%;
+    word-wrap: break-word;
+}
+
+.message.question {
+    background-color: #cce5ff;
+    color: #004085;
+    align-self: flex-start;
+    text-align: left;
+}
+
+.message.answer {
+    background-color: #d4edda;
+    color: #155724;
+    align-self: flex-end;
+    text-align: right;
+}
+
+.message p {
+    margin: 0;
+    padding: 0;
+}
