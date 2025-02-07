@@ -36,3 +36,23 @@
     margin: 0;
     padding: 0;
 }
+.message-box.question {
+
+    justify-content: end;
+    text-align: right;
+    align-self: flex-end; /* Align question to the right */
+    background-color: white;
+    max-width: 60%; /* Limit box width */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    margin-top: 5px; /* Move the question box closer to the top */
+    color:black;
+  }
+  
+  .message-box.answer {
+    /* background-color: rgb(47, 47, 47); */
+    justify-content: flex-start;
+    text-align: left;
+    margin-top: 5px; 
+    line-height: 30px
+    ;/* Move the answer box closer to the top */
+  }

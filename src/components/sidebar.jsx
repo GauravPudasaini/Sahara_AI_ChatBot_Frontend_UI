@@ -1,39 +1,50 @@
-    import React from "react";
-    import './sidebar.css';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import './sidebar.css';
 
-    const Sidebar = ({ sessions, currentSessionId, onSwitchSession, onStartNewSession, sessionQuestions = {} }) => {
-        // Ensure the new session appears at the top by ordering sessions
-        const orderedSessions = Object.keys(sessions).reverse(); // Reverse to put the latest session first
+const Sidebar = ({ sessions, currentSessionId, onSwitchSession, onStartNewSession }) => {
+  const navigate = useNavigate();
+  const orderedSessions = Object.keys(sessions).reverse();
 
-            const handleNewSessionClick = () => {
-        onStartNewSession();
-    };
+  const handleNewSessionClick = () => {
+    const newSessionId = onStartNewSession();
+    if (newSessionId) {
+      navigate(`/chat/${newSessionId}`);
+    }
+  };
 
-        return (
-            <div className="sidebar">
-                {/* Button to start a new session at the top */}
-                <a
-                    onClick= {handleNewSessionClick}
-                    className="new-session-button"
-                >
-                    + New Session
-                </a>
+  const handleSessionClick = (sessionId) => {
+    onSwitchSession(sessionId);
+    navigate(`/chat/${sessionId}`);
+  };
 
-                <div className="session-list">
-                    {/* List of existing sessions, with the latest one at the top */}
-                    {orderedSessions.map((sessionId) => (
-                        <button
-                            key={sessionId}
-                            onClick={() => onSwitchSession(sessionId)}
-                            className={`session-link ${currentSessionId === sessionId ? "active" : ""}`}
-                        >
-                            {sessionQuestions[sessionId] || sessionId}
-                        </button>
-                    ))}
-                </div>
-                <div className="logo-section"></div>
-            </div>
-        );
-    };
+  // Function to get the session name based on the first message
+  const getSessionName = (sessionId) => {
+    const sessionMessages = sessions[sessionId];
+    if (sessionMessages && sessionMessages.length > 0) {
+      // Return the first message's text as the session name
+      return sessionMessages[0].text;
+    }
+    // Fallback to session ID if no messages exist
+    return 'New Chat';
+  };
 
-    export default Sidebar;
+  return (
+    <div className="sidebar">
+      <button onClick={handleNewSessionClick} className="new-session-button">+ New Session</button>
+      <div className="session-list">
+        {orderedSessions.map((sessionId) => (
+          <button
+            key={sessionId}
+            onClick={() => handleSessionClick(sessionId)}
+            className={`session-link ${currentSessionId === sessionId ? "active" : ""}`}
+          >
+            {getSessionName(sessionId)} {/* Display the first message as the session name */}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default Sidebar;

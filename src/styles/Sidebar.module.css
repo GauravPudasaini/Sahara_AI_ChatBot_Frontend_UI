@@ -4,7 +4,7 @@
     top: 0;
     left: 0;
     width: 180px;
-    height: 92%;
+    height: 90%;
     padding: 20px;
     box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
     display: flex;
@@ -31,7 +31,7 @@
   }
   
   .session-link {
-    background-color: rgb(21, 21, 21);
+    background-color: black;
     display: block;
     width: 100%;
     padding: 10px;
@@ -43,10 +43,10 @@
     border: none;
   }
   
-  .session-link.active {
+  /* .session-link.active {
     background-color: #525252;
     color: white;
-  }
+  } */
   
   .session-link:hover {
     background-color: white;
@@ -56,13 +56,11 @@
   .new-session-button {
     width: 90%;
     padding: 10px;
-    color: rgb(255, 255, 255);
+    color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     margin-top: 50px;
-    background-color: rgb(16, 16, 16);
-
   }
   
   .new-session-button:hover {
