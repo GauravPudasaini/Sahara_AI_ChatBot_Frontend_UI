@@ -4,18 +4,18 @@
  
 input#userInput {
   margin: auto;
-  width: 80vh;
+  width: 100vh;
   padding-right: 40px; 
   padding-left: 10px;
-  height: 45px;
+  height: 40px;
   border: 1px solid #ccc;
-  border-radius: 20px;
+  border-radius: 10px;
   font-size: 16px;
   outline: none;
 }
 
 
-button.submit-btn {
+button.submit-btn, .stop-btn {
   position: relative;
   right: 7vh;
   top: 13px;

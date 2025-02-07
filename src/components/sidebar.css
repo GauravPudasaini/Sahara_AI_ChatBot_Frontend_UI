@@ -19,11 +19,12 @@
   }
   
   .session-list {
-    top: 30px;
     flex-grow: 1;
     overflow-y: auto;
     scrollbar-width: none;
     margin-top: 10px;
+    height: auto;
+    margin-bottom: 20vh;
   }
   
   .session-list::-webkit-scrollbar {
@@ -31,17 +32,24 @@
   }
   
   .session-link {
+    white-space: nowrap; 
     background-color: rgb(21, 21, 21);
-    display: block;
+    display: inline-block;
     width: 100%;
-    padding: 10px;
+    padding: 7px;
     margin-bottom: 10px;
     text-decoration: none;
     border-radius: 5px;
     color: white;
     text-align: left;
     border: none;
+    overflow-x: auto;
+    scrollbar-width: none;
+    color: white;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0), rgb(43, 42, 42));
+    pointer-events: none; /* Ensures it doesn't interfere with scrolling */
   }
+
   
   .session-link.active {
     background-color: #525252;

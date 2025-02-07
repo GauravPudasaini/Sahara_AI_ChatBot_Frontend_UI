@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSliders } from '@fortawesome/free-solid-svg-icons';
@@ -8,9 +8,9 @@ import LoadingIndicator from "./LoadingIndicator";
 import Sidebar from "./sidebar.jsx";
 import { useSession } from "../hooks/useSession.js";
 import { useFetchData } from "../hooks/useFetchData.js";
-import "../styles/ChatInterface.module.css";
 import AnswerBox from "./answer_box.jsx";
 import logo from "../assets/logo.png";
+
 
 const ChatInterface = () => {
   const { sessionId } = useParams();
@@ -19,7 +19,7 @@ const ChatInterface = () => {
     sessions, setSessions, currentSessionId, setCurrentSessionId,
     messages, setMessages, startNewSession, switchSession, recordQuestion
   } = useSession(sessionId);
-  const { fetchApiData, isFetching } = useFetchData(currentSessionId, messages, setMessages, setSessions);
+  const { fetchApiData, isFetching, stopFetching } = useFetchData(currentSessionId, messages, setMessages, setSessions);
   
   const [showSidebar, setShowSidebar] = useState(() => {
     return localStorage.getItem("showSidebar") === "true";
@@ -27,13 +27,18 @@ const ChatInterface = () => {
   const [userInput, setUserInput] = useState("");
   const [logoPosition, setLogoPosition] = useState("center");
   const [searchbarPosition, setsearchbarPosition] = useState("center");
+  const messagesEndRef = useRef(null);
 
 
   useEffect(() => {
     if (!sessionId && Object.keys(sessions).length === 0) {
-      setCurrentSessionId(null); // No session is initially active
+      setCurrentSessionId(null);
     }
   }, [sessionId, sessions, setCurrentSessionId]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const toggleSidebar = () => {
     setShowSidebar((prev) => {
@@ -65,17 +70,23 @@ const ChatInterface = () => {
         
         <div className="messages-wrapper">
           {messages.map((message, index) => (
-            <AnswerBox key={index} message={message} />
-
+            <AnswerBox key={index} message={message} 
+            ref={index === messages.length - 1 ? messagesEndRef : null} // Attach ref to the last message
+            />
           ))}
-                  {isFetching && <LoadingIndicator />}
+            <div ref={messagesEndRef} /> {/* This is the element to scroll to */}
+            {isFetching && <LoadingIndicator />}
 
         </div>
         <div className={`search-bar ${searchbarPosition === "center" && messages.length === 0 ? "" : "show"}`}>
         <SearchBar onSend={(input) => {
           fetchApiData(input);
           recordQuestion(input);
-        }} setUserInput={setUserInput} />
+        }} 
+        setUserInput={setUserInput} 
+        isFetching={isFetching} 
+        stopFetching={stopFetching} 
+        />
         </div>
       </div>
     </div>

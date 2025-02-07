@@ -1,9 +1,9 @@
 import './search_bar.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { faPaperPlane, faStop } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from 'react';
 
-const SearchBar = ({ onSend }) => {
+const SearchBar = ({ onSend, isFetching, stopFetching }) => {
     const [input, setInput] = useState('');
 
     const handleSend = () => {
@@ -20,7 +20,7 @@ const SearchBar = ({ onSend }) => {
     };
 
     return (
-      <div className="input-wrapper">
+        <div className="input-wrapper">
             <input 
                 type="text"
                 id="userInput" 
@@ -29,7 +29,17 @@ const SearchBar = ({ onSend }) => {
                 onKeyPress={handleKeyPress}
                 placeholder="Ask a question..."
             />
-            <button className="submit-btn" onClick={handleSend}><FontAwesomeIcon icon={faPaperPlane} /></button>
+            
+            {/* Conditional rendering for button */}
+            {isFetching ? (
+                <button className="stop-btn" onClick={stopFetching}>
+                    <FontAwesomeIcon icon={faStop} />
+                </button>
+            ) : (
+                <button className="submit-btn" onClick={handleSend}>
+                    <FontAwesomeIcon icon={faPaperPlane} />
+                </button>
+            )}
         </div>
     );
 };
