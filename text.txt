@@ -1,0 +1,1 @@
+npm install @fortawesome/fontawesome-svg-core @fortawesome/free-solid-svg-icons @fortawesome/react-fontawesome @tailwindcss/postcss @tailwindcss/vite axios dotenv fontawesome postcss react react-dom react-loading-indicators react-markdown react-router-dom react-markdown

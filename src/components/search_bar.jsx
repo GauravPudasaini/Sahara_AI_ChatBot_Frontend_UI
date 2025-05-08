@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane, faStop } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from 'react';
 
-const SearchBar = ({ onSend, isFetching, stopFetching }) => {
+const SearchBar = ({ onSend, isFetching, stopFetching, currentSessionId }) => {
     const [input, setInput] = useState('');
 
     const handleSend = () => {
@@ -30,9 +30,8 @@ const SearchBar = ({ onSend, isFetching, stopFetching }) => {
                 placeholder="Ask a question..."
             />
             
-            {/* Conditional rendering for button */}
             {isFetching ? (
-                <button className="stop-btn" onClick={stopFetching}>
+                <button className="stop-btn" onClick={() => stopFetching(currentSessionId)}>
                     <FontAwesomeIcon icon={faStop} />
                 </button>
             ) : (

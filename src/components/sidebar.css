@@ -32,32 +32,31 @@
   }
   
   .session-link {
-    white-space: nowrap; 
-    background-color: rgb(21, 21, 21);
+    white-space: nowrap;
     display: inline-block;
     width: 100%;
-    padding: 7px;
+    padding: 7px 12px;
     margin-bottom: 10px;
     text-decoration: none;
     border-radius: 5px;
-    color: white;
     text-align: left;
     border: none;
     overflow-x: auto;
     scrollbar-width: none;
     color: white;
-    background: linear-gradient(to right, rgba(0, 0, 0, 0), rgb(43, 42, 42));
-    pointer-events: none; /* Ensures it doesn't interfere with scrolling */
+  
+    background: linear-gradient(to right, #1a1a1a, #000000);
   }
 
   
   .session-link.active {
     background-color: #525252;
     color: white;
+  
   }
   
-  .session-link:hover {
-    background-color: white;
+  .session-link.active {
+    background: linear-gradient(to right, #bebdbd, #070707);
     color: black;
   }
   

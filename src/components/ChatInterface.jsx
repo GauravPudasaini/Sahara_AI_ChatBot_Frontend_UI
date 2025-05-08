@@ -19,8 +19,7 @@ const ChatInterface = () => {
     sessions, setSessions, currentSessionId, setCurrentSessionId,
     messages, setMessages, startNewSession, switchSession, recordQuestion
   } = useSession(sessionId);
-  const { fetchApiData, isFetching, stopFetching } = useFetchData(currentSessionId, messages, setMessages, setSessions);
-  
+  const { fetchApiData, isFetchingBySession, errorBySession, stopFetching } = useFetchData(setMessages, setSessions);
   const [showSidebar, setShowSidebar] = useState(() => {
     return localStorage.getItem("showSidebar") === "true";
   });
@@ -31,10 +30,26 @@ const ChatInterface = () => {
 
 
   useEffect(() => {
-    if (!sessionId && Object.keys(sessions).length === 0) {
-      setCurrentSessionId(null);
+    if (!sessionId) {
+      // If there is an empty session, use it
+      const existingEmptySessionId = Object.keys(sessions).find(
+        (id) => sessions[id]?.length === 0
+      );
+
+      if (existingEmptySessionId) {
+        navigate(`/chat/${existingEmptySessionId}`, { replace: true });
+      } else {
+        const newSessionId = startNewSession();
+        navigate(`/chat/${newSessionId}`, { replace: true });
+      }
+    } else {
+      // If we have a sessionId in URL, make sure it is set
+      setCurrentSessionId(sessionId);
+      if (!sessions[sessionId]) {
+        setSessions((prev) => ({ ...prev, [sessionId]: [] }));
+      }
     }
-  }, [sessionId, sessions, setCurrentSessionId]);
+  }, [sessionId, sessions, navigate, setCurrentSessionId, setSessions, startNewSession]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -46,6 +61,13 @@ const ChatInterface = () => {
       localStorage.setItem("showSidebar", newState);
       return newState;
     });
+  };
+
+  const handleSend = (input) => {
+    if (currentSessionId) {
+      fetchApiData(input, currentSessionId);
+      // recordQuestion(input);
+    }
   };
 
   return (
@@ -70,23 +92,22 @@ const ChatInterface = () => {
         
         <div className="messages-wrapper">
           {messages.map((message, index) => (
-            <AnswerBox key={index} message={message} 
-            ref={index === messages.length - 1 ? messagesEndRef : null} // Attach ref to the last message
-            />
+            <AnswerBox key={index} message={message} />
           ))}
-            <div ref={messagesEndRef} /> {/* This is the element to scroll to */}
-            {isFetching && <LoadingIndicator />}
-
+          {errorBySession[currentSessionId] && (
+            <div className="error-message">{errorBySession[currentSessionId]}</div>
+          )}
+          {isFetchingBySession[currentSessionId] && <LoadingIndicator />}
+          <div ref={messagesEndRef} />
         </div>
+
         <div className={`search-bar ${searchbarPosition === "center" && messages.length === 0 ? "" : "show"}`}>
-        <SearchBar onSend={(input) => {
-          fetchApiData(input);
-          recordQuestion(input);
-        }} 
-        setUserInput={setUserInput} 
-        isFetching={isFetching} 
-        stopFetching={stopFetching} 
-        />
+        <SearchBar
+            onSend={handleSend}
+            setUserInput={setUserInput}
+            isFetching={isFetchingBySession[currentSessionId] || false}
+            stopFetching={() => stopFetching(currentSessionId)}
+          />
         </div>
       </div>
     </div>

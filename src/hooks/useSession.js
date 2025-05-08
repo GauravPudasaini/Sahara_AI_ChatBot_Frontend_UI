@@ -44,7 +44,7 @@ export const useSession = (sessionId) => {
     if (hasExistingSessions && existingNewSessionId) {
       const mostRecentSessionId = Object.keys(sessions).reverse()[0]; // Get the most recent session
       setCurrentSessionId(mostRecentSessionId, existingNewSessionId);
-      return mostRecentSessionId, existingNewSessionId;
+      return mostRecentSessionId || existingNewSessionId;
     }
   
     // If no sessions exist, create a new session
@@ -58,23 +58,26 @@ export const useSession = (sessionId) => {
   // Switch to an existing session
   const switchSession = (sessionId) => {
     setCurrentSessionId(sessionId);
-    setMessages(Array.isArray(sessions[sessionId]) ? sessions[sessionId] : []);
+    // setMessages(Array.isArray(sessions[sessionId]) ? sessions[sessionId] : []);
     localStorage.setItem("currentSessionId", sessionId);
   };
-
+  useEffect(() => {
+    const msgs = Array.isArray(sessions[currentSessionId]) ? sessions[currentSessionId] : [];
+    setMessages(msgs);
+  }, [currentSessionId, sessions]);
   // Record a new question and ensure a session exists
-  const recordQuestion = (question) => {
-    let sessionToUse = currentSessionId;
-    if (!sessionToUse) {
-      sessionToUse = startNewSession();
-    }
+  // const recordQuestion = (question) => {
+  //   let sessionToUse = currentSessionId;
+  //   if (!sessionToUse) {
+  //     sessionToUse = startNewSession();
+  //   }
 
-    // Ensure session exists before updating
-    setSessions((prev) => ({
-      ...prev,
-      [sessionToUse]: [...(prev[sessionToUse] || []), { text: question, type: "question" }],
-    }));
-  };
+  //   // Ensure session exists before updating
+  //   setSessions((prev) => ({
+  //     ...prev,
+  //     [sessionToUse]: [...(prev[sessionToUse] || []), { text: question, type: "question" }],
+  //   }));
+  // };
 
   return {
     sessions,
@@ -85,6 +88,6 @@ export const useSession = (sessionId) => {
     setMessages,
     startNewSession,
     switchSession,
-    recordQuestion,
+    // recordQuestion,
   };
 };

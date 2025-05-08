@@ -1,10 +1,11 @@
 import React from "react";
-import "./asnwer_box.css";
+import ReactMarkdown from "react-markdown";
+import "./answer_box.css";
 
 function AnswerBox({ message }) {
   return (
     <div className={`message-box ${message.type}`}>
-      <p>{message.text}</p>
+      <ReactMarkdown>{message.text}</ReactMarkdown>
     </div>
   );
 }
